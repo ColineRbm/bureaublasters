@@ -35,19 +35,36 @@ def catalogue_essai():
 def test_recherche_normalisee():
     """Avec catalogue_essai(), «  LANCEUR  » et « lanceur » doivent retrouver L1 et M1."""
     catalogue = catalogue_essai()
+    
     resultat = rechercher_produits(catalogue, "  LANCEUR  ")
     identifiants = []
     for produit in resultat:
         identifiants.append(produit["id"])
-    # À compléter : compare les identifiants et le résultat de la recherche normalisée.
-    raise NotImplementedError("test_recherche_normalisee est à compléter.")
+    assert identifiants == ["L1", "M1"], f"Résultat inattendu : {identifiants}"
 
+    resultat_normalise = rechercher_produits(catalogue, "lanceur")
+    identifiants_normalises = []
+    for produit in resultat_normalise:
+        identifiants_normalises.append(produit["id"])
+    assert identifiants_normalises == ["L1", "M1"], f"Résultat inattendu : {identifiants_normalises}"
+    
 
 def test_selection_seuil_inclus():
     """Avec les maxima 20 €, 800 g et 50 cm, seule L1 convient ; A1 dépasse le poids."""
-    # À compléter : suis le contrat et les vérifications de cette étape dans le README.
-    raise NotImplementedError("test_selection_seuil_inclus est à compléter.")
+    catalogue = catalogue_essai()
+    
+    select_seuil = selectionner_equipements(catalogue, 20, 800, 50)
+    identifiants = []
+    for produit in select_seuil:
+        identifiants.append(produit["id"])
+    assert identifiants == ["L1"], f'Résultat inattendu : {identifiants}'
 
+    """Avec les maxima 20 €, 799 g et 50 cm, aucun équipement ne convient"""
+    select_poids_limite = selectionner_equipements(catalogue, 20, 799, 50)
+    identifiants = []
+    for produit in select_poids_limite:
+        identifiants.append(produit["id"])
+    assert identifiants == [], f'Résultat inattendu : {identifiants}'
 
 # Étape 3 : comparer les besoins aux références fournies.
 def test_consommable_sans_fournisseur():
