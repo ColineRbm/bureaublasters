@@ -58,26 +58,37 @@ def consommables_sans_offre(catalogue):
 # Étape 4 : transformer chaque demande en une ligne de commande indépendante.
 def trouver_produit(catalogue, identifiant):
     """Retourne la fiche d'identifiant exact, ou None si elle est absente."""
-    # À compléter : suis le contrat et les vérifications de cette étape dans le README.
-    raise NotImplementedError("trouver_produit est à compléter.")
+    for produit in catalogue:
+        if produit["id"] == identifiant:
+            return produit
+    return None
 
 
 def lire_demande(texte):
     """Retourne un dictionnaire id/quantite depuis une ligne « identifiant ; entier »."""
-    # À compléter : suis le contrat et les vérifications de cette étape dans le README.
-    raise NotImplementedError("lire_demande est à compléter.")
+    champs_nettoye = texte.split(";")
+    
+    identifiant = champs_nettoye[0].strip().upper()
+    quantite = int(champs_nettoye[1].strip())
+    
+    return {
+        "id": identifiant,
+        "quantite": quantite
+    }
 
 
 def calculer_budget(produit, quantite):
     """Retourne le prix de quantite conditionnements, entière positive ou nulle, arrondi à deux décimales."""
-    # À compléter : suis le contrat et les vérifications de cette étape dans le README.
-    raise NotImplementedError("calculer_budget est à compléter.")
+    montant = produit["prix_euros"] * quantite
+    return round(montant, 2)
 
 
 def preparer_ligne(produit, quantite):
     """Retourne une copie superficielle de la fiche avec quantite et sous_total_euros."""
-    # À compléter : suis le contrat et les vérifications de cette étape dans le README.
-    raise NotImplementedError("preparer_ligne est à compléter.")
+    copie = produit.copy()
+    copie["quantite"] = quantite
+    copie["sous_total_euros"] = calculer_budget(produit, quantite)
+    return copie
 
 
 def preparer_commande(catalogue, demandes):
